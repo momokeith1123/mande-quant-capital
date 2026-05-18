@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Performance | Mandé Quant Capital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:     #FFD700;
+      --green:    #00ff88;
+      --black:    #080c14;
+      --dark:     #0d1220;
+      --card:     #101828;
+      --border:   #1c2a40;
+      --text:     #dce6f0;
+      --muted:    #7a90a8;
+      --red:      #ff4d6d;
+      --mono:     'Roboto Mono', monospace;
+      --sans:     'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--gold); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--green); }
+
+    /* ── NAV (identical to index.html) ─────────────────────── */
+    .logo-svg { display: inline-flex; align-items: center; gap: 0.75rem; }
+    .logo-mark { width: 42px; height: 42px; flex-shrink: 0; }
+    .logo-text-wrap { display: flex; flex-direction: column; line-height: 1.1; }
+    .logo-main { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--gold); letter-spacing: 0.08em; }
+    .logo-sub  { font-family: var(--mono); font-size: 0.55rem; color: var(--green); letter-spacing: 0.18em; text-transform: uppercase; margin-top: 2px; }
+
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%;
+      background: rgba(8,12,20,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000; padding: 0 5%;
+      display: flex; align-items: center;
+      justify-content: space-between; height: 72px;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a { color: var(--muted); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .nav-cta { border: 1px solid var(--gold); color: var(--gold) !important; padding: 0.45rem 1.1rem; border-radius: 2px; font-size: 0.78rem !important; letter-spacing: 0.1em !important; transition: background 0.2s, color 0.2s !important; }
+    .nav-cta:hover { background: var(--gold) !important; color: var(--black) !important; }
+
+    /* ── PAGE HERO ──────────────────────────────────────────── */
+    .page-hero {
+      padding: 140px 5% 70px;
+      background: var(--dark);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,215,0,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,215,0,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,255,136,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .page-hero-inner {
+      max-width: 1200px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .page-eyebrow {
+      font-family: var(--mono); font-size: 0.72rem;
+      color: var(--green); letter-spacing: 0.22em;
+      text-transform: uppercase; margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .page-eyebrow::before {
+      content: ''; width: 28px; height: 1px;
+      background: var(--green); display: inline-block;
+    }
+    .page-hero h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; color: var(--white, #fff);
+      line-height: 1.15; margin-bottom: 1rem;
+    }
+    .page-hero h1 .gold  { color: var(--gold); }
+    .page-hero h1 .green { color: var(--green); }
+    .page-hero p {
+      color: var(--muted); font-size: 1rem;
+      max-width: 620px; line-height: 1.85;
+    }
+    .disclaimer-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: 1.5rem;
+      font-family: var(--mono); font-size: 0.68rem;
+      color: var(--muted); letter-spacing: 0.1em;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 2px; padding: 0.4rem 0.9rem;
+    }
+    .disclaimer-tag::before {
+      content: '⚠';
+      color: var(--gold);
+    }
+
+    /* ── SECTIONS ───────────────────────────────────────────── */
+    section { padding: 80px 5%; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .s-tag {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--gold);
+      letter-spacing: 0.22em; text-transform: uppercase;
+      margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.6rem;
+    }
+    .s-tag::before { content: ''; width: 20px; height: 1px; background: var(--gold); display: inline-block; }
+    h2 { font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 700; color: #fff; margin-bottom: 0.75rem; }
+    h2 .gold  { color: var(--gold); }
+    h2 .green { color: var(--green); }
+    .s-lead { color: var(--muted); font-size: 0.97rem; max-width: 640px; line-height: 1.85; margin-bottom: 2.5rem; }
+
+    /* ── METRICS BAND ───────────────────────────────────────── */
+    .metrics-band {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 5%;
+    }
+    .metrics-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    .metric-cell {
+      background: var(--dark); padding: 2rem 1.5rem; text-align: center;
+    }
+    .metric-label { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.6rem; }
+    .metric-value { font-family: var(--mono); font-size: 1.9rem; font-weight: 600; color: var(--gold); line-height: 1; }
+    .metric-value.green { color: var(--green); }
+    .metric-value.red   { color: var(--red); }
+    .metric-sub { font-size: 0.73rem; color: var(--muted); margin-top: 0.4rem; }
+
+    /* ── CHART SECTION ──────────────────────────────────────── */
+    .chart-section { background: var(--black); }
+    .chart-section.alt { background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .chart-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+      position: relative;
+    }
+    .chart-block::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--green), transparent);
+    }
+    .chart-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .chart-title {
+      font-family: var(--mono); font-size: 0.72rem;
+      color: var(--gold); letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .chart-badge {
+      font-family: var(--mono); font-size: 0.62rem;
+      color: var(--green); letter-spacing: 0.1em;
+      background: rgba(0,255,136,0.07);
+      border: 1px solid rgba(0,255,136,0.2);
+      padding: 0.2rem 0.6rem; border-radius: 2px;
+    }
+    .chart-img-wrap {
+      padding: 1rem;
+    }
+    .chart-img-wrap img {
+      width: 100%; height: auto;
+      display: block; border-radius: 3px;
+    }
+    .chart-caption {
+      padding: 0.75rem 1.5rem 1rem;
+      font-size: 0.78rem; color: var(--muted);
+      border-top: 1px solid var(--border);
+      line-height: 1.6;
+    }
+
+    .chart-grid-2 {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem; margin-top: 1.5rem;
+    }
+    .chart-full { margin-top: 1.5rem; }
+
+    /* ── PERFORMANCE TABLE ──────────────────────────────────── */
+    .perf-table-wrap {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 6px; overflow: hidden; margin-top: 0.5rem;
+    }
+    .perf-table {
+      width: 100%; border-collapse: collapse;
+    }
+    .perf-table thead tr {
+      background: var(--dark);
+      border-bottom: 1px solid var(--border);
+    }
+    .perf-table th {
+      text-align: left; padding: 0.85rem 1.25rem;
+      font-family: var(--mono); font-size: 0.68rem;
+      color: var(--gold); letter-spacing: 0.12em;
+      text-transform: uppercase; font-weight: 500;
+    }
+    .perf-table td {
+      padding: 0.85rem 1.25rem;
+      font-size: 0.88rem; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .perf-table td:first-child { color: var(--text); font-weight: 500; }
+    .perf-table td.val-gold    { color: var(--gold); font-family: var(--mono); font-weight: 600; }
+    .perf-table td.val-green   { color: var(--green); font-family: var(--mono); font-weight: 600; }
+    .perf-table td.val-red     { color: var(--red); font-family: var(--mono); font-weight: 600; }
+    .perf-table tbody tr:last-child td { border-bottom: none; }
+    .perf-table tbody tr:hover td { background: rgba(255,215,0,0.03); }
+
+    /* ── METHODOLOGY CARDS ──────────────────────────────────── */
+    .method-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem; margin-top: 2rem;
+    }
+    .method-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.75rem;
+      position: relative; overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .method-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .method-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--green));
+      transition: width 0.35s;
+    }
+    .method-card:hover::after { width: 100%; }
+    .method-num {
+      font-family: var(--mono); font-size: 0.65rem; color: var(--gold);
+      letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+    .method-card h3 { color: #fff; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .method-card p  { color: var(--muted); font-size: 0.83rem; line-height: 1.7; }
+
+    /* ── CTA BAND ───────────────────────────────────────────── */
+    .cta-band {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 70px 5%; text-align: center;
+    }
+    .cta-band h2 { margin-bottom: 0.75rem; }
+    .cta-band p { color: var(--muted); max-width: 560px; margin: 0 auto 2rem; line-height: 1.8; }
+    .btn-gold {
+      display: inline-block; background: var(--gold); color: var(--black);
+      padding: 0.85rem 2rem; border-radius: 2px; font-weight: 700;
+      font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+    .btn-gold:hover { opacity: 0.88; color: var(--black); }
+
+    /* ── FOOTER (minimal — matches index.html) ──────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 3rem 5% 2rem;
+    }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { color: var(--muted); font-size: 0.78rem; }
+    .mono-tag { font-family: var(--mono); font-size: 0.68rem; color: var(--gold); letter-spacing: 0.12em; }
+    .disclaimer {
+      max-width: 1200px; margin: 1.5rem auto 0;
+      padding-top: 1.25rem; border-top: 1px solid var(--border);
+      font-size: 0.72rem; color: var(--muted); line-height: 1.7;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .metrics-grid  { grid-template-columns: repeat(2, 1fr); }
+      .chart-grid-2  { grid-template-columns: 1fr; }
+      .method-grid   { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .method-grid  { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .metrics-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+================================================================ -->
+<nav>
+  <div class="logo-svg">
+    <svg class="logo-mark" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 38 C6 30 4 20 8 10 C9 7 11 5 12 8 C13 14 12 24 14 30" stroke="#FFD700" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M32 38 C36 30 38 20 34 10 C33 7 31 5 30 8 C29 14 30 24 28 30" stroke="#FFD700" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <polygon points="21,10 32,21 21,32 10,21" stroke="#FFD700" stroke-width="1.5" fill="rgba(255,215,0,0.07)"/>
+      <polygon points="21,15 27,21 21,27 15,21" stroke="#00ff88" stroke-width="1" fill="rgba(0,255,136,0.08)"/>
+      <circle cx="21" cy="21" r="2" fill="#00ff88"/>
+      <circle cx="21" cy="10" r="1.5" fill="#FFD700"/>
+      <circle cx="32" cy="21" r="1.5" fill="#FFD700"/>
+      <circle cx="21" cy="32" r="1.5" fill="#FFD700"/>
+      <circle cx="10" cy="21" r="1.5" fill="#FFD700"/>
+      <line x1="21" y1="10" x2="21" y2="15" stroke="#00ff88" stroke-width="0.8" opacity="0.6"/>
+      <line x1="32" y1="21" x2="27" y2="21" stroke="#00ff88" stroke-width="0.8" opacity="0.6"/>
+      <line x1="21" y1="32" x2="21" y2="27" stroke="#00ff88" stroke-width="0.8" opacity="0.6"/>
+      <line x1="10" y1="21" x2="15" y2="21" stroke="#00ff88" stroke-width="0.8" opacity="0.6"/>
+    </svg>
+    <div class="logo-text-wrap">
+      <span class="logo-main">MANDÉ QUANT CAPITAL</span>
+      <span class="logo-sub">Systematic · Algorithmic · Global</span>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#strategies">Strategies</a></li>
+    <li><a href="performance.html" class="active">Performance</a></li>
+    <li><a href="index.html#founder">Team</a></li>
+    <li><a href="#contact" class="nav-cta">Investor Relations</a></li>
+  </ul>
+</nav>
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-eyebrow">Strategy Performance · Statistical Arbitrage</div>
+    <h1>
+      Six Years of<br/>
+      <span class="gold">Out-of-Sample</span>
+      <span class="green"> Evidence.</span>
+    </h1>
+    <p>
+      Every figure on this page is derived from strict walk-forward
+      out-of-sample backtesting — parameters estimated on historical data,
+      performance measured on data the model has never seen.
+      No in-sample optimisation. No cherry-picking. No narrative.
+    </p>
+    <div class="disclaimer-tag">
+      Past performance of backtested results is not indicative of future results.
+      For qualified investors only.
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     KEY METRICS BAND
+================================================================ -->
+<div class="metrics-band">
+  <div class="metrics-grid">
+    <div class="metric-cell">
+      <div class="metric-label">Sharpe Ratio</div>
+      <div class="metric-value">0.79</div>
+      <div class="metric-sub">Walk-forward OOS · 2018–2024</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-label">Max Drawdown</div>
+      <div class="metric-value red">−1.13%</div>
+      <div class="metric-sub">Market-neutral construction</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-label">Win Rate</div>
+      <div class="metric-value green">51.65%</div>
+      <div class="metric-sub">Breakeven: 40.1%  ·  Edge: +11.5pp</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-label">Profit Factor</div>
+      <div class="metric-value">1.59</div>
+      <div class="metric-sub">$1.59 won per $1 lost</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     CHART 1 — CUMULATIVE RETURNS
+================================================================ -->
+<section class="chart-section">
+  <div class="section-inner">
+    <div class="s-tag">Returns</div>
+    <h2>Cumulative Net <span class="gold">Return</span></h2>
+    <p class="s-lead">
+      Net return after transaction costs (2 bps/side) and short borrow costs
+      (50 bps/year). Generated across 44 independent out-of-sample
+      walk-forward test windows spanning 6.5 years.
+    </p>
+
+    <div class="chart-full">
+      <div class="chart-block">
+        <div class="chart-header">
+          <span class="chart-title">// cumulative_returns · equity_stat_arb</span>
+          <span class="chart-badge">OOS · 2018–2024</span>
+        </div>
+        <div class="chart-img-wrap">
+          <img src="assets/images/charts/chart_cumulative_returns.png"
+               alt="Cumulative Returns — Equity StatArb Strategy"
+               loading="lazy"/>
+        </div>
+        <div class="chart-caption">
+          Cumulative net return of the Equity Statistical Arbitrage strategy across 6.5 years
+          of walk-forward out-of-sample testing. Orange shading indicates drawdown periods.
+          Walk-forward configuration: 756-day training window, 126-day test window,
+          63-day roll-forward (6:1 train-to-test ratio).
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHART 2 & 3 — DRAWDOWN + ROLLING SHARPE
+================================================================ -->
+<section class="chart-section alt">
+  <div class="section-inner">
+    <div class="s-tag">Risk Metrics</div>
+    <h2>Drawdown & <span class="gold">Rolling Sharpe</span></h2>
+    <p class="s-lead">
+      Maximum drawdown of −1.13% over 6.5 years reflects the genuine
+      market-neutrality of the portfolio — near-zero beta to broad equity indices.
+    </p>
+
+    <div class="chart-grid-2">
+      <div class="chart-block">
+        <div class="chart-header">
+          <span class="chart-title">// drawdown_curve</span>
+          <span class="chart-badge">Max: −1.13%</span>
+        </div>
+        <div class="chart-img-wrap">
+          <img src="assets/images/charts/chart_drawdown.png"
+               alt="Drawdown Curve"
+               loading="lazy"/>
+        </div>
+        <div class="chart-caption">
+          Drawdown expressed as percentage decline from the rolling peak cumulative return.
+          The strategy spent minimal time in drawdown — consistent with a
+          market-neutral, mean-reverting strategy.
+        </div>
+      </div>
+
+      <div class="chart-block">
+        <div class="chart-header">
+          <span class="chart-title">// rolling_sharpe_ratio</span>
+          <span class="chart-badge">Avg: 0.79</span>
+        </div>
+        <div class="chart-img-wrap">
+          <img src="assets/images/charts/chart_rolling_sharpe.png"
+               alt="Rolling Sharpe Ratio"
+               loading="lazy"/>
+        </div>
+        <div class="chart-caption">
+          63-day and 126-day rolling Sharpe ratio. The 126-day rolling average
+          (gold line) shows a consistently positive Sharpe across the full
+          out-of-sample period, confirming the edge is durable and not
+          concentrated in a single market regime.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHART 4 — MONTHLY HEATMAP
+================================================================ -->
+<section class="chart-section">
+  <div class="section-inner">
+    <div class="s-tag">Monthly Returns</div>
+    <h2>Monthly Returns <span class="gold">Heatmap</span></h2>
+    <p class="s-lead">
+      Return consistency across calendar months and years.
+      Green cells represent positive months; red cells represent negative months.
+    </p>
+
+    <div class="chart-full">
+      <div class="chart-block">
+        <div class="chart-header">
+          <span class="chart-title">// monthly_returns_heatmap</span>
+          <span class="chart-badge">2018–2024</span>
+        </div>
+        <div class="chart-img-wrap">
+          <img src="assets/images/charts/chart_monthly_heatmap.png"
+               alt="Monthly Returns Heatmap"
+               loading="lazy"/>
+        </div>
+        <div class="chart-caption">
+          Monthly net returns (%). The heatmap confirms that positive
+          performance is broadly distributed across months and years
+          rather than concentrated in a small number of exceptional periods.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     FULL PERFORMANCE TABLE
+================================================================ -->
+<section class="chart-section alt">
+  <div class="section-inner">
+    <div class="s-tag">Full Statistics</div>
+    <h2>Complete Performance <span class="gold">Statistics</span></h2>
+    <p class="s-lead">
+      All metrics derived from walk-forward out-of-sample backtesting,
+      January 2018 – December 2024.
+      Net of 2 bps/side transaction costs and 50 bps/year short borrow costs.
+    </p>
+
+    <div class="perf-table-wrap">
+      <table class="perf-table">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Annualised Return</td>
+            <td class="val-gold">0.43%</td>
+            <td>Market-neutral book · $2M capital base</td>
+          </tr>
+          <tr>
+            <td>Annualised Volatility</td>
+            <td class="val-gold">0.54%</td>
+            <td>Low — reflects dollar-neutral construction</td>
+          </tr>
+          <tr>
+            <td>Sharpe Ratio</td>
+            <td class="val-gold">0.79</td>
+            <td>Institutional grade for market-neutral strategy</td>
+          </tr>
+          <tr>
+            <td>Sortino Ratio</td>
+            <td class="val-gold">0.88</td>
+            <td>Higher than Sharpe — asymmetric return distribution</td>
+          </tr>
+          <tr>
+            <td>Maximum Drawdown</td>
+            <td class="val-red">−1.13%</td>
+            <td>−$22,600 peak-to-trough on $2M book</td>
+          </tr>
+          <tr>
+            <td>Calmar Ratio</td>
+            <td class="val-gold">0.38</td>
+            <td>Return per unit of maximum drawdown</td>
+          </tr>
+          <tr>
+            <td>Profit Factor</td>
+            <td class="val-green">1.59</td>
+            <td>$1.59 generated per $1.00 lost</td>
+          </tr>
+          <tr>
+            <td>Win Rate</td>
+            <td class="val-green">51.65%</td>
+            <td>Breakeven = 40.1% · Edge = +11.5 pp</td>
+          </tr>
+          <tr>
+            <td>Avg Win / Avg Loss</td>
+            <td class="val-gold">1.49×</td>
+            <td>Winners 49% larger than losers on average</td>
+          </tr>
+          <tr>
+            <td>Total Net P&L</td>
+            <td class="val-green">+$111,705</td>
+            <td>Across 364 closed trades · 6.5 years OOS</td>
+          </tr>
+          <tr>
+            <td>Number of Trades</td>
+            <td class="val-gold">364</td>
+            <td>~56 trades per year across 11 pairs</td>
+          </tr>
+          <tr>
+            <td>Avg Holding Period</td>
+            <td class="val-gold">17.6 days</td>
+            <td>Consistent with 58-day average half-life</td>
+          </tr>
+          <tr>
+            <td>% Trades Stopped Out</td>
+            <td class="val-gold">2.75%</td>
+            <td>10 trades · spreads revert naturally</td>
+          </tr>
+          <tr>
+            <td>Strategy Capacity</td>
+            <td class="val-gold">$20–30M</td>
+            <td>Estimated before execution cost erosion</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHART 5 & 6 — PER-PAIR + TRADE DISTRIBUTION
+================================================================ -->
+<section class="chart-section">
+  <div class="section-inner">
+    <div class="s-tag">Portfolio Detail</div>
+    <h2>Pair-Level & Trade <span class="gold">Analytics</span></h2>
+    <p class="s-lead">
+      Performance attribution across the 11 confirmed co-integrated pairs
+      and trade-level distribution analysis.
+    </p>
+
+    <div class="chart-full">
+      <div class="chart-block">
+        <div class="chart-header">
+          <span class="chart-title">// per_pair_performance · 11 pairs</span>
+          <span class="chart-badge">Net P&L + Win Rate</span>
+        </div>
+        <div class="chart-img-wrap">
+          <img src="assets/images/charts/chart_per_pair_performance.png"
+               alt="Per-Pair Performance Breakdown"
+               loading="lazy"/>
+        </div>
+        <div class="chart-caption">
+          Left: net P&L contribution by pair. Right: win rate by pair vs the
+          40.1% breakeven threshold (dotted line). All 11 pairs in the final
+          portfolio are net positive contributors over the 6.5-year OOS period.
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-full" style="margin-top:1.5rem;">
+      <div class="chart-block">
+        <div class="chart-header">
+          <span class="chart-title">// trade_pnl_distribution · 364 trades</span>
+          <span class="chart-badge">Histogram + Waterfall</span>
+        </div>
+        <div class="chart-img-wrap">
+          <img src="assets/images/charts/chart_trade_distribution.png"
+               alt="Trade PnL Distribution"
+               loading="lazy"/>
+        </div>
+        <div class="chart-caption">
+          Left: distribution of individual trade net P&L — wins (green) skew larger
+          than losses (red), producing the 1.49× avg win/loss ratio.
+          Right: sorted waterfall view of all 364 trades — the gradual
+          upward slope of the green bars confirms consistent, broad-based edge
+          rather than a few exceptional outliers.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHART 7 — SECTOR ALLOCATION
+================================================================ -->
+<section class="chart-section alt">
+  <div class="section-inner">
+    <div class="s-tag">Diversification</div>
+    <h2>Sector <span class="gold">Allocation</span></h2>
+    <p class="s-lead">
+      The portfolio diversifies across 5 economic sectors, with the highest
+      co-integration rates found in Utilities and Consumer Staples —
+      sectors with stable, structurally linked revenue streams.
+    </p>
+
+    <div class="chart-full">
+      <div class="chart-block">
+        <div class="chart-header">
+          <span class="chart-title">// sector_allocation · 5 sectors</span>
+          <span class="chart-badge">P&L + Trade Count</span>
+        </div>
+        <div class="chart-img-wrap">
+          <img src="assets/images/charts/chart_sector_allocation.png"
+               alt="Sector Allocation"
+               loading="lazy"/>
+        </div>
+        <div class="chart-caption">
+          Left: net P&L contribution by GICS sector. Right: trade allocation
+          by sector as a percentage of total trades. The portfolio is deliberately
+          concentrated in sectors with the highest empirical co-integration rates —
+          Utilities, Consumer Staples, and Energy.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     METHODOLOGY SUMMARY
+================================================================ -->
+<section class="chart-section">
+  <div class="section-inner">
+    <div class="s-tag">Validation Methodology</div>
+    <h2>Why This Backtest Is <span class="gold">Trustworthy</span></h2>
+    <p class="s-lead">
+      Most published backtests overfit. Here is what makes ours different.
+    </p>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="method-num">01 · Walk-Forward</div>
+        <h3>Out-of-Sample Only</h3>
+        <p>
+          Every performance figure uses data the model has never seen.
+          756-day training window, 126-day test window, 63-day roll.
+          44 independent test periods across 6.5 years.
+        </p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">02 · No Parameter Tuning</div>
+        <h3>Fixed Signal Thresholds</h3>
+        <p>
+          Entry, exit, and stop-loss thresholds are fixed at strategy inception
+          based on statistical theory — never adjusted to improve backtest metrics.
+          Parameters are structural, not fitted.
+        </p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">03 · Realistic Costs</div>
+        <h3>Net of All Transaction Costs</h3>
+        <p>
+          2 bps/side transaction cost (institutional bid-ask spread).
+          50 bps/year short borrow cost. Zero commission.
+          All results are gross-to-net after these deductions.
+        </p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">04 · Economic Rationale</div>
+        <h3>No Data Mining</h3>
+        <p>
+          Every pair in the portfolio shares a documented economic link —
+          same GICS sector, same commodity exposure, same regulatory environment.
+          Statistical tests confirm what economics predicts.
+        </p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">05 · Regime Independence</div>
+        <h3>Tested Across Market Cycles</h3>
+        <p>
+          The validation period includes COVID-19 (2020), the 2022 rate shock,
+          and multiple sector-specific dislocations. The strategy's maximum
+          drawdown across all of these was −1.13%.
+        </p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">06 · LSEG Data</div>
+        <h3>Institutional Data Source</h3>
+        <p>
+          All price data sourced from LSEG Refinitiv Data Library
+          (lseg.data v2.1.1) — the institutional standard for quantitative
+          research. Split-adjusted daily closing prices via Capital Change History.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CTA
+================================================================ -->
+<div class="cta-band" id="contact">
+  <div class="s-tag" style="justify-content:center">Investor Relations</div>
+  <h2>Request the Full <span class="gold">Investor Memorandum</span></h2>
+  <p>
+    Qualified investors may request our complete investor memorandum —
+    including full walk-forward performance records, methodology documentation,
+    risk disclosures, and due diligence materials.
+  </p>
+  <a href="mailto:investors@mandequantcapital.com?subject=Investor%20Memorandum%20Request%20-%20StatArb"
+     class="btn-gold">
+    Request Memorandum &rarr;
+  </a>
+</div>
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Mandé Quant Capital, LP. All rights reserved.</p>
+    <span class="mono-tag">precision · discipline · alpha</span>
+  </div>
+  <div class="disclaimer">
+    <strong>Legal Disclaimer:</strong> This website is for informational
+    purposes only and does not constitute an offer to sell or a solicitation
+    of an offer to buy any security or investment product. All performance
+    figures are derived from walk-forward backtesting and are not indicative
+    of future results. Past performance does not guarantee future results.
+    Mandé Quant Capital, LP is intended for qualified and sophisticated
+    investors only. All investments involve risk, including the possible loss
+    of principal. Nothing contained on this website should be construed as
+    investment, legal, or tax advice. Prospective investors should conduct
+    their own due diligence and consult with appropriate professional advisors
+    before making any investment decision.
+  </div>
+</footer>
+
+</body>
+</html>
