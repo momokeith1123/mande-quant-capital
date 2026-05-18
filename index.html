@@ -941,6 +941,122 @@
       color: var(--muted);
       line-height: 1.7;
     }
+/* ============================================================
+   CONTACT MODAL
+============================================================ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 12, 20, 0.92);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2.5rem 2.5rem 2rem;
+  width: 100%;
+  max-width: 520px;
+  position: relative;
+  overflow: hidden;
+}
+.modal-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--green));
+}
+.modal-close {
+  position: absolute;
+  top: 1rem; right: 1.25rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.modal-close:hover { color: var(--gold); }
+.modal-tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.modal-tag::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: var(--gold);
+  display: inline-block;
+}
+.modal-box h3 { color: var(--white); font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem; }
+.modal-box .modal-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.75rem; line-height: 1.7; }
+.form-group { margin-bottom: 1.1rem; }
+.form-group label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: var(--black);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  padding: 0.65rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--gold); }
+.form-group select { appearance: none; cursor: pointer; }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.btn-submit {
+  width: 100%;
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  border-radius: 2px;
+  padding: 0.85rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: opacity 0.2s;
+}
+.btn-submit:hover { opacity: 0.88; }
+.form-success { display: none; text-align: center; padding: 2rem 0 1rem; }
+.form-success .success-icon { font-size: 2.5rem; color: var(--green); margin-bottom: 1rem; }
+.form-success p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+.form-success strong { color: var(--text); }
+@media (max-width: 560px) {
+  .modal-box { padding: 2rem 1.25rem 1.5rem; margin: 1rem; }
+  .form-row { grid-template-columns: 1fr; }
+}
 
     /* ============================================================
        RESPONSIVE
@@ -1009,7 +1125,7 @@
     <li><a href="#strategies">Strategies</a></li>
     <li><a href="#founder">Team</a></li>
     <li><a href="#heritage">Heritage</a></li>
-    <li><a href="contact.html" class="nav-cta">Investor Relations</a></li>
+    <li><a href="#" class="nav-cta open-contact-modal">Investor Relations</a></li>
   </ul>
 </nav>
 
@@ -1030,7 +1146,7 @@
       </p>
       <div class="hero-actions">
         <a href="#strategies" class="btn-gold">Our Strategies</a>
-        <a href="#founder" class="btn-outline">Meet the Founder</a>
+        <a href="#" class="btn-outline open-contact-modal">Meet the Founder</a>
       </div>
     </div>
 
@@ -1397,7 +1513,7 @@
       <p>
         We welcome conversations with qualified investors, family offices, institutions, and allocators seeking uncorrelated, systematic returns.
       </p>
-      <a href="contact.html" class="btn-gold">Get in Touch</a>
+      <a href="#" class="btn-gold open-contact-modal">Get in Touch</a>
     </div>
   </div>
 </section>
@@ -1475,6 +1591,117 @@
     <strong>Legal Disclaimer:</strong> This website is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product. Past performance is not indicative of future results. Mandé Quant Capital, LP is intended for qualified and sophisticated investors only. All investments involve risk, including the possible loss of principal. Nothing contained on this website should be construed as investment, legal, or tax advice. Prospective investors should conduct their own due diligence and consult with appropriate professional advisors before making any investment decision.
   </div>
 </footer>
+<!-- ================================================================
+     CONTACT MODAL
+================================================================ -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="Close">&#215;</button>
+
+    <div id="formContent">
+      <div class="modal-tag">Investor Relations</div>
+      <h3>Get in Touch</h3>
+      <p class="modal-sub">
+        We welcome qualified investors, family offices, and institutional allocators. Submit your details and we will be in touch.
+      </p>
+
+      <form id="contactForm" action="https://formspree.io/f/xaqkyelp" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="first_name" placeholder="First name" required/>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="last_name" placeholder="Last name" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" required/>
+        </div>
+        <div class="form-group">
+          <label for="organization">Organization</label>
+          <input type="text" id="organization" name="organization" placeholder="Firm / Institution"/>
+        </div>
+        <div class="form-group">
+          <label for="investorType">Investor Type</label>
+          <select id="investorType" name="investor_type">
+            <option value="" disabled selected>Select type...</option>
+            <option value="Family Office">Family Office</option>
+            <option value="Institutional Investor">Institutional Investor</option>
+            <option value="Fund of Funds">Fund of Funds</option>
+            <option value="UHNW Individual">UHNW Individual</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us about your interest or inquiry..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Message &rarr;</button>
+      </form>
+    </div>
+
+    <div class="form-success" id="formSuccess">
+      <div class="success-icon">&#10003;</div>
+      <h3 style="color: var(--white); margin-bottom: 0.75rem;">Message Sent</h3>
+      <p><strong>Thank you for reaching out.</strong><br/>We will review your inquiry and be in touch shortly.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('contactModal');
+  const modalClose = document.getElementById('modalClose');
+  const contactForm = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('formSuccess');
+  const formContent = document.getElementById('formContent');
+
+  function openModal(e) {
+    e.preventDefault();
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.open-contact-modal').forEach(function(el) {
+    el.addEventListener('click', openModal);
+  });
+
+  modalClose.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var data = new FormData(contactForm);
+    fetch(contactForm.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(function(response) {
+      if (response.ok) {
+        formContent.style.display = 'none';
+        formSuccess.style.display = 'block';
+      } else {
+        alert('There was an issue sending your message. Please try again.');
+      }
+    }).catch(function() {
+      alert('Network error. Please check your connection and try again.');
+    });
+  });
+</script>
 
 </body>
 </html>
